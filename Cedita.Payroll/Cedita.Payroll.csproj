@@ -6,11 +6,16 @@
     <OutputType>library</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="**\*.cs" />
+    <!--<Compile Include="**\*.cs" />-->
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NETStandard.Library" Version="1.6.1" />
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--<PackageReference Include="NETStandard.Library" Version="1.6.1" />-->
     <PackageReference Include="System.Reflection" Version="4.3.0" />
   </ItemGroup>
 </Project>

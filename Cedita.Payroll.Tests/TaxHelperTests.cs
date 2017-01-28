@@ -1,5 +1,6 @@
 ﻿// Copyright (c) Cedita Ltd. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the solution root for license information.
+using Cedita.Payroll;
 using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,24 +13,24 @@ namespace Cedita.Payroll.Tests
         public void TaxDateDerivation()
         {
             // Tax Week 53 occured slightly differently in 2014
-            Assert.AreEqual(52, new DateTime(2014, 04, 04).TaxPeriod().Week);
-            Assert.AreEqual(53, new DateTime(2014, 04, 05).TaxPeriod().Week);
-            Assert.AreEqual(12, new DateTime(2014, 04, 05).TaxPeriod().Month);
+            Assert.AreEqual(52, new DateTime(2014, 04, 04).GetTaxPeriod().Week);
+            Assert.AreEqual(53, new DateTime(2014, 04, 05).GetTaxPeriod().Week);
+            Assert.AreEqual(12, new DateTime(2014, 04, 05).GetTaxPeriod().Month);
 
-            Assert.AreEqual(52, new DateTime(2016, 04, 03).TaxPeriod().Week);
-            Assert.AreEqual(53, new DateTime(2016, 04, 04).TaxPeriod().Week);
-            Assert.AreEqual(53, new DateTime(2016, 04, 05).TaxPeriod().Week);
-            Assert.AreEqual(1, new DateTime(2016, 04, 06).TaxPeriod().Week);
-            Assert.AreEqual(1, new DateTime(2016, 04, 07).TaxPeriod().Week);
+            Assert.AreEqual(52, new DateTime(2016, 04, 03).GetTaxPeriod().Week);
+            Assert.AreEqual(53, new DateTime(2016, 04, 04).GetTaxPeriod().Week);
+            Assert.AreEqual(53, new DateTime(2016, 04, 05).GetTaxPeriod().Week);
+            Assert.AreEqual(1, new DateTime(2016, 04, 06).GetTaxPeriod().Week);
+            Assert.AreEqual(1, new DateTime(2016, 04, 07).GetTaxPeriod().Week);
             
-            Assert.AreEqual(12, new DateTime(2016, 04, 05).TaxPeriod().Month);
-            Assert.AreEqual(1, new DateTime(2016, 04, 06).TaxPeriod().Month);
+            Assert.AreEqual(12, new DateTime(2016, 04, 05).GetTaxPeriod().Month);
+            Assert.AreEqual(1, new DateTime(2016, 04, 06).GetTaxPeriod().Month);
 
-            Assert.AreEqual(2015, new DateTime(2016, 04, 05).TaxPeriod().Year);
-            Assert.AreEqual(2016, new DateTime(2016, 04, 06).TaxPeriod().Year);
-            Assert.AreEqual(2016, new DateTime(2017, 01, 01).TaxPeriod().Year);
-            Assert.AreEqual(2016, new DateTime(2017, 04, 05).TaxPeriod().Year);
-            Assert.AreEqual(2017, new DateTime(2017, 04, 06).TaxPeriod().Year);
+            Assert.AreEqual(2015, new DateTime(2016, 04, 05).GetTaxPeriod().Year);
+            Assert.AreEqual(2016, new DateTime(2016, 04, 06).GetTaxPeriod().Year);
+            Assert.AreEqual(2016, new DateTime(2017, 01, 01).GetTaxPeriod().Year);
+            Assert.AreEqual(2016, new DateTime(2017, 04, 05).GetTaxPeriod().Year);
+            Assert.AreEqual(2017, new DateTime(2017, 04, 06).GetTaxPeriod().Year);
         }
 
         [TestCategory("Helpers"), TestMethod]

@@ -25,5 +25,27 @@ namespace Cedita.Payroll.Models
             FourWeek = fourweek;
             Month = month;
         }
+
+        public TaxPeriod(DateTime date)
+        {
+            Date = date;
+            Year = date.Year;
+            if (date.Month < 4 || (date.Month == 4 && date.Day < 6))
+                Year--;
+
+            var taxYearStart = new DateTime(Year, 4, 6);
+            var span = date - taxYearStart;
+
+            Week = (int)Math.Floor(span.Days / 7d) + 1;
+            Fortnight = Week / 2;
+            FourWeek = Week / 4;
+
+            if (date.Day < 6)
+                date = date.AddMonths(-1);
+
+            var monthDiff = date.Month - 3;
+            var yearDiff = date.Year - Year;
+            Month = (yearDiff * 12) + monthDiff;
+        }
     }
 }

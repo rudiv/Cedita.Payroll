@@ -5,6 +5,6 @@ namespace Cedita.Payroll.Engines.Paye
 {
     public interface IPayeCalculationEngine : IResolvableEngine
     {
-
+        PayeInternalBracket GetBracket(int year, int period, int periods);
     }
 }
