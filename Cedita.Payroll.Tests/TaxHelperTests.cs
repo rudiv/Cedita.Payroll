@@ -1,0 +1,83 @@
+﻿// Copyright (c) Cedita Ltd. All rights reserved.
+// Licensed under the Apache License, Version 2.0. See LICENSE in the solution root for license information.
+using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace Cedita.Payroll.Tests
+{
+    [TestClass]
+    public class TaxHelperTests
+    {
+        [TestCategory("Helpers"), TestMethod]
+        public void TaxDateDerivation()
+        {
+            // Tax Week 53 occured slightly differently in 2014
+            Assert.AreEqual(52, new DateTime(2014, 04, 04).TaxPeriod().Week);
+            Assert.AreEqual(53, new DateTime(2014, 04, 05).TaxPeriod().Week);
+            Assert.AreEqual(12, new DateTime(2014, 04, 05).TaxPeriod().Month);
+
+            Assert.AreEqual(52, new DateTime(2016, 04, 03).TaxPeriod().Week);
+            Assert.AreEqual(53, new DateTime(2016, 04, 04).TaxPeriod().Week);
+            Assert.AreEqual(53, new DateTime(2016, 04, 05).TaxPeriod().Week);
+            Assert.AreEqual(1, new DateTime(2016, 04, 06).TaxPeriod().Week);
+            Assert.AreEqual(1, new DateTime(2016, 04, 07).TaxPeriod().Week);
+            
+            Assert.AreEqual(12, new DateTime(2016, 04, 05).TaxPeriod().Month);
+            Assert.AreEqual(1, new DateTime(2016, 04, 06).TaxPeriod().Month);
+
+            Assert.AreEqual(2015, new DateTime(2016, 04, 05).TaxPeriod().Year);
+            Assert.AreEqual(2016, new DateTime(2016, 04, 06).TaxPeriod().Year);
+            Assert.AreEqual(2016, new DateTime(2017, 01, 01).TaxPeriod().Year);
+            Assert.AreEqual(2016, new DateTime(2017, 04, 05).TaxPeriod().Year);
+            Assert.AreEqual(2017, new DateTime(2017, 04, 06).TaxPeriod().Year);
+        }
+
+        [TestCategory("Helpers"), TestMethod]
+        public void NumberTruncationTest()
+        {
+            Assert.AreEqual(9999.99999m, TaxMath.Truncate(9999.999999999m, 5));
+            Assert.AreEqual(9999.9999m, TaxMath.Truncate(9999.999999999m, 4));
+            Assert.AreEqual(9999.999m, TaxMath.Truncate(9999.999999999m, 3));
+            Assert.AreEqual(9999.99m, TaxMath.Truncate(9999.999999999m, 2));
+            Assert.AreEqual(9999.9m, TaxMath.Truncate(9999.999999999m, 1));
+            Assert.AreEqual(9999m, TaxMath.Truncate(9999.999999999m, 0));
+            Assert.AreEqual(9990m, TaxMath.Truncate(9999.999999999m, -1));
+
+            Assert.AreEqual(-9999.99999m, TaxMath.Truncate(-9999.999999999m, 5));
+            Assert.AreEqual(-9999.9999m, TaxMath.Truncate(-9999.999999999m, 4));
+            Assert.AreEqual(-9999.999m, TaxMath.Truncate(-9999.999999999m, 3));
+            Assert.AreEqual(-9999.99m, TaxMath.Truncate(-9999.999999999m, 2));
+            Assert.AreEqual(-9999.9m, TaxMath.Truncate(-9999.999999999m, 1));
+            Assert.AreEqual(-9999m, TaxMath.Truncate(-9999.999999999m, 0));
+            Assert.AreEqual(-9990m, TaxMath.Truncate(-9999.999999999m, -1));
+        }
+
+        [TestCategory("Helpers"), TestMethod]
+        public void BankersRoundingTest()
+        {
+            Assert.AreEqual(1m, TaxMath.BankersRound(0.99999m));
+            Assert.AreEqual(1.96m, TaxMath.BankersRound(1.956m));
+            Assert.AreEqual(2.96m, TaxMath.BankersRound(2.9555555m));
+            Assert.AreEqual(2.47m, TaxMath.BankersRound(2.4719m));
+            Assert.AreEqual(978.55m, TaxMath.BankersRound(978.54823m));
+            Assert.AreEqual(8956.54m, TaxMath.BankersRound(8956.54168m));
+            Assert.AreEqual(654.17m, TaxMath.BankersRound(654.168749m));
+            Assert.AreEqual(236514.47m, TaxMath.BankersRound(236514.46984m));
+            Assert.AreEqual(784.47m, TaxMath.BankersRound(784.4687m));
+        }
+
+        [TestCategory("Helpers"), TestMethod]
+        public void HmrcRoundingTest()
+        {
+            Assert.AreEqual(1m, TaxMath.HmrcRound(0.99999m));
+            Assert.AreEqual(1.96m, TaxMath.HmrcRound(1.956m));
+            Assert.AreEqual(2.95m, TaxMath.HmrcRound(2.9555555m));
+            Assert.AreEqual(2.47m, TaxMath.HmrcRound(2.4719m));
+            Assert.AreEqual(978.55m, TaxMath.HmrcRound(978.54823m));
+            Assert.AreEqual(8956.54m, TaxMath.HmrcRound(8956.54168m));
+            Assert.AreEqual(654.17m, TaxMath.HmrcRound(654.168749m));
+            Assert.AreEqual(236514.47m, TaxMath.HmrcRound(236514.46984m));
+            Assert.AreEqual(784.47m, TaxMath.HmrcRound(784.4687m));
+        }
+    }
+}
