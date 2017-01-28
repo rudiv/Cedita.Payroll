@@ -10,11 +10,7 @@
     <EmbeddedResource Include="**\*.resx" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NETStandard.Library" Version="1.6" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Engines\" />
-    <Folder Include="Constraints\" />
-    <Folder Include="Internal\" />
+    <PackageReference Include="NETStandard.Library" Version="1.6.1" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
   </ItemGroup>
 </Project>

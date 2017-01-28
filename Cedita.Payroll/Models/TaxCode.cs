@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace Cedita.Payroll.Models
 {
     /// <summary>
-    /// <see cref="TaxCode"/> represents a United Kingdom tax code translated into a system usable format.
+    /// <see cref="TaxCode"/> represents a United Kingdom tax code translated into a system usable format
     /// </summary>
     public class TaxCode
     {
@@ -60,7 +60,7 @@ namespace Cedita.Payroll.Models
             return taxCode.PerformTranslation(input);
         }
         /// <summary>
-        /// Converts the string to a <see cref="TaxCode"/> representation.
+        /// Converts the string to a <see cref="TaxCode"/> representation
         /// </summary>
         /// <exception cref="ArgumentNullException" />
         /// <exception cref="FormatException" />

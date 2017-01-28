@@ -1,6 +1,5 @@
 // Copyright (c) Cedita Ltd. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the solution root for license information.
-
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Cedita.Payroll.Models;
 
@@ -13,8 +12,7 @@ namespace Cedita.Payroll.Tests
         public void ErroneousCodeHandling()
         {
             // Test TryParse
-            TaxCode failedTaxCode;
-            Assert.AreEqual(false, TaxCode.TryParse("ABC", out failedTaxCode));
+            Assert.AreEqual(false, TaxCode.TryParse("ABC", out var failedTaxCode));
             Assert.AreEqual(false, TaxCode.TryParse("!", out failedTaxCode));
             Assert.AreEqual(false, TaxCode.TryParse(null, out failedTaxCode));
             // Test Parse

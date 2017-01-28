@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="TaxCodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EngineResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
