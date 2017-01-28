@@ -13,5 +13,10 @@ namespace Cedita.Payroll.Engines.Paye
         {
             return new PayeInternalBracket();
         }
+
+        public void SetTaxYearSpecificsProvider(IProvideTaxYearSpecifics provider)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
