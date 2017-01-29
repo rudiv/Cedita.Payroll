@@ -824,10 +824,9 @@
     "LowerEarningsLimit": 5876,
     "PrimaryThreshold": 8164,
     "SecondaryThreshold": 8164,
-    "UpperEarningsLimit": 45032,
-    "UpperSecondaryThreshold": 45032,
-    "ApprenticeUpperSecondaryThreshold": 45032,
-    "UpperAccrualPoint": 0,
+    "UpperEarningsLimit": 45000,
+    "UpperSecondaryThreshold": 45000,
+    "ApprenticeUpperSecondaryThreshold": 45000,
 
     "Plan1StudentLoanThreshold": 17775,
     "Plan1StudentLoanRate": 0.09,

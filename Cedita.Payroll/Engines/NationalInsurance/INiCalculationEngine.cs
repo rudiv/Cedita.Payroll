@@ -3,7 +3,8 @@
 
 namespace Cedita.Payroll.Engines.NationalInsurance
 {
-    public interface INiCalculationEngine : IResolvableEngine
+    public interface INiCalculationEngine : IResolvableEngine, IRequireTaxYearSpecifics
     {
+        NationalInsuranceCalculation CalculateNationalInsurance(decimal gross, char niCategory, PayPeriods periods);
     }
 }

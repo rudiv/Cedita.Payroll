@@ -11,6 +11,7 @@ namespace Cedita.Payroll.Engines
     public interface IRequireTaxYearSpecifics
     {
         void SetTaxYearSpecificsProvider(IProvideTaxYearSpecifics provider);
+        void SetTaxYear(int taxYear);
     }
 
     /// <summary>

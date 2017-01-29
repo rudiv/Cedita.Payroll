@@ -6,8 +6,6 @@ namespace Cedita.Payroll.Engines.Paye
 {
     public interface IPayeCalculationEngine : IResolvableEngine, IRequireTaxYearSpecifics
     {
-        void SetTaxYear(int taxYear);
-
         decimal CalculateTaxDueForPeriod(string taxCode, decimal gross, PayPeriods periods, int period, bool week1 = false, decimal grossToDate = 0, decimal taxToDate = 0);
         decimal CalculateTaxDueForPeriod(TaxCode taxCode, decimal gross, PayPeriods periods, int period, bool week1 = false, decimal grossToDate = 0, decimal taxToDate = 0);
     }
