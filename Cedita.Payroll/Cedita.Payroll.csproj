@@ -1,6 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>0.1.0.0-dev</Version>
+    <Authors>Cedita</Authors>
+    <Company>Cedita Ltd</Company>
+    <Description>.NET Standard implementation of the United Kingdom's HMRC UK Tax legislation.</Description>
+    <Copyright>Cedita Ltd 2017</Copyright>
+    <PackageProjectUrl>https://www.cedita.com/</PackageProjectUrl>
+    <PackageIconUrl>https://www.cedita.com/nuget.png</PackageIconUrl>
+    <RepositoryUrl>https://www.github.com/cedita/Cedita.Payroll</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>payroll hmrc tax nationalinsurance rti ni calculations uk uktax json cedita taxyearspecifics</PackageTags>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputType>library</OutputType>
