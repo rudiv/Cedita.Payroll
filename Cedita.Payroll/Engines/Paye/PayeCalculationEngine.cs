@@ -14,8 +14,8 @@ namespace Cedita.Payroll.Engines.Paye
     {
         protected virtual int TaxYear { get; set; }
         protected virtual PayeCalculationContainer CalculationContainer { get; set; }
-        protected virtual Dictionary<Tuple<int, int, int>, PayeInternalBracket[]> BracketCache { get; set; }
-            = new Dictionary<Tuple<int, int, int>, PayeInternalBracket[]>();
+        protected virtual Dictionary<Tuple<int, int, int, bool>, PayeInternalBracket[]> BracketCache { get; set; }
+            = new Dictionary<Tuple<int, int, int, bool>, PayeInternalBracket[]>();
         protected virtual IProvideTaxYearSpecifics TaxYearSpecificProvider { get; set; }
 
         public void SetTaxYearSpecificsProvider(IProvideTaxYearSpecifics provider)
@@ -35,7 +35,7 @@ namespace Cedita.Payroll.Engines.Paye
         }
         public abstract decimal CalculateTaxDueForPeriod(TaxCode taxCode, decimal gross, PayPeriods periods, int period, bool week1 = false, decimal grossToDate = 0, decimal taxToDate = 0);
 
-        protected abstract PayeInternalBracket[] GetBracketsForPeriod(int year, int period, int periods);
+        protected abstract PayeInternalBracket[] GetBracketsForPeriod();
 
         protected abstract decimal GetPayAdjustment(TaxCode taxCode, PayPeriods periods/*, int period*/);
 

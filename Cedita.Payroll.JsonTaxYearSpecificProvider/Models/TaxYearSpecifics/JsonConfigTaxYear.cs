@@ -27,5 +27,6 @@ namespace Cedita.Payroll.Models.TaxYearSpecifics
         public List<FixedCode> FixedCodes { get; set; }
         public List<NationalInsuranceCode> NiRates { get; set; }
         public List<TaxBracket> Brackets { get; set; }
+        public List<TaxBracket> ScottishBrackets { get; set; }
     }
 }

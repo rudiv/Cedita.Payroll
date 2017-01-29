@@ -34,7 +34,7 @@ namespace Cedita.Payroll.Engines.Paye
             }
             else
             {
-                var brackets = GetBracketsForPeriod(TaxYear, CalculationContainer.n, (int)CalculationContainer.Periods);
+                var brackets = GetBracketsForPeriod();//TaxYear, CalculationContainer.n, (int)CalculationContainer.Periods);
 
                 for (int i = 0; i < brackets.Length; i++)
                 {
@@ -96,13 +96,21 @@ namespace Cedita.Payroll.Engines.Paye
             return new PayeCalculationContainer();
         }
 
-        protected override PayeInternalBracket[] GetBracketsForPeriod(int year, int period, int periods)
+        protected virtual IEnumerable<TaxBracket> GetBracketsFromProvider(bool scottish = false)
         {
-            Tuple<int, int, int> brKey;
-            if (BracketCache.ContainsKey(brKey = new Tuple<int, int, int>(year, period, periods)))
+            return TaxYearSpecificProvider.GetTaxBrackets(scottish);
+        }
+
+        protected override PayeInternalBracket[] GetBracketsForPeriod()
+        {
+            int year = TaxYear, period = CalculationContainer.n, periods = (int)CalculationContainer.Periods;
+            bool scottish = CalculationContainer.TaxCode.IsScotlandTax;
+
+            Tuple<int, int, int, bool> brKey;
+            if (BracketCache.ContainsKey(brKey = new Tuple<int, int, int, bool>(year, period, periods, scottish)))
                 return BracketCache[brKey];
 
-            var taxYearBrackets = TaxYearSpecificProvider.GetTaxBrackets();
+            var taxYearBrackets = GetBracketsFromProvider(scottish);
             var periodBrackets = new List<PayeInternalBracket>();
 
             decimal lastC = 0, lastK = 0;

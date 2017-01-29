@@ -943,6 +943,23 @@
         "To": 2147483647,
         "Multiplier": 0.45
       }
+    ],
+    "ScottishBrackets": [
+      {
+        "From": 0,
+        "To": 31930,
+        "Multiplier": 0.2
+      },
+      {
+        "From": 31930,
+        "To": 150000,
+        "Multiplier": 0.4
+      },
+      {
+        "From": 150000,
+        "To": 2147483647,
+        "Multiplier": 0.45
+      }
     ]
   }
 ]

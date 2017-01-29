@@ -132,11 +132,11 @@ namespace Cedita.Payroll
             return (T)retValue;
         }
 
-        public IEnumerable<TaxBracket> GetTaxBrackets()
+        public IEnumerable<TaxBracket> GetTaxBrackets(bool scottish = false)
         {
             EnsureTaxYearSet();
 
-            return CurrentTaxYear.Brackets;
+            return scottish ? CurrentTaxYear.ScottishBrackets : CurrentTaxYear.Brackets;
         }
     }
 }

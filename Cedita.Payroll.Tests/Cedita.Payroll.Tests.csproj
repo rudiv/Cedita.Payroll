@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PayeTests.2017.ScottishRate.cs" />
     <Compile Include="PayeTests.2017.cs" />
     <Compile Include="PayeTests.2016.cs" />
     <Compile Include="PayeTests.2015.cs" />

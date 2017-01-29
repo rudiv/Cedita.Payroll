@@ -27,6 +27,6 @@ namespace Cedita.Payroll.Engines
         NationalInsuranceCode GetCodeSpecifics(char niCode);
         bool IsFixedCode(string taxCode);
         FixedCode GetFixedCode(string taxCode);
-        IEnumerable<TaxBracket> GetTaxBrackets();
+        IEnumerable<TaxBracket> GetTaxBrackets(bool scottish = false);
     }
 }
