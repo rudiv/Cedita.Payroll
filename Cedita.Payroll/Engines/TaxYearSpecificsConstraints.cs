@@ -25,6 +25,7 @@ namespace Cedita.Payroll.Engines
 
         T GetSpecificValue<T>(TaxYearSpecificValues specificValueType);
         NationalInsuranceCode GetCodeSpecifics(char niCode);
+        bool IsFixedCode(string taxCode);
         FixedCode GetFixedCode(string taxCode);
         IEnumerable<TaxBracket> GetTaxBrackets();
     }

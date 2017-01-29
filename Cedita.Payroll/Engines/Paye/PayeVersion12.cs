@@ -2,21 +2,158 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the solution root for license information.
 using System;
 using System.Collections.Generic;
+using Cedita.Payroll.Models;
+using Cedita.Payroll.Models.TaxYearSpecifics;
 
 namespace Cedita.Payroll.Engines.Paye
 {
     [EngineApplicableTaxYear(TaxYearStartYear = 2014)]
-    public class PayeVersion12 : IPayeCalculationEngine
+    public class PayeVersion12 : PayeCalculationEngine
     {
-        protected Dictionary<Tuple<int, int, int>, PayeInternalBracket> BracketStore { get; set; }
-        public PayeInternalBracket GetBracket(int year, int period, int periods)
+        public override decimal CalculateTaxDueForPeriod(TaxCode taxCode, decimal gross, PayPeriods periods, int period, bool week1 = false, decimal grossToDate = 0, decimal taxToDate = 0)
         {
-            return new PayeInternalBracket();
+            CreateContainer(taxCode, gross, periods, period, week1, grossToDate, taxToDate);
+            CalculateTax();
+
+            return CalculationContainer.ln;
         }
 
-        public void SetTaxYearSpecificsProvider(IProvideTaxYearSpecifics provider)
+        protected override void CalculateTax()
         {
-            throw new NotImplementedException();
+            CalculateLn();
+            Calculateln();
+        }
+
+        protected virtual void CalculateLn()
+        {
+            var taxableIncome = Math.Max(Math.Floor(CalculationContainer.Pn - CalculationContainer.na1), 0);
+            FixedCode fixedCode;
+            if ((fixedCode = TaxYearSpecificProvider.GetFixedCode(CalculationContainer.TaxCode.SanitisedTaxCode)) != null)
+            {
+                CalculationContainer.Ln = taxableIncome * fixedCode.Rate;
+            }
+            else
+            {
+                var brackets = GetBracketsForPeriod(TaxYear, CalculationContainer.n, (int)CalculationContainer.Periods);
+
+                for (int i = 0; i < brackets.Length; i++)
+                {
+                    var lastv = i > 0 ? brackets[i - 1].v : 0;
+                    var lastc = i > 0 ? brackets[i - 1].c : 0;
+                    var lastk = i > 0 ? brackets[i - 1].k : 0;
+
+                    if (CalculationContainer.Un > lastv && CalculationContainer.Un <= brackets[i].v)
+                    {
+                        CalculationContainer.Ln = lastk + ((CalculationContainer.Tn - lastc) * brackets[i].R);
+                        break;
+                    }
+                }
+            }
+        }
+
+        protected virtual void Calculateln()
+        {
+            CalculationContainer.ln = TaxMath.Truncate(CalculationContainer.Ln, 2);
+
+            if (CalculationContainer.n > 1)
+                CalculationContainer.ln -= CalculationContainer.TaxToDate;
+
+            if (CalculationContainer.TaxCode.IsPrefixCode)
+                CalculationContainer.ln = Math.Min(CalculationContainer.ln, TaxMath.Truncate(CalculationContainer.pn * (CalculationContainer.M / 100), 2));
+        }
+
+        protected override void CreateContainer(TaxCode taxCode, decimal grossForPeriod, PayPeriods periods, int period = 1, bool week1 = false, decimal grossToDateExcludingPeriod = 0, decimal taxToDateExcludingPeriod = 0)
+        {
+            if (week1 || period == 1)
+            {
+                period = 1;
+                grossToDateExcludingPeriod = 0;
+                taxToDateExcludingPeriod = 0;
+            }
+
+            CalculationContainer = new PayeCalculationContainer
+            {
+                TaxCode = taxCode,
+                Week1 = week1,
+                Periods = periods,
+                TaxToDate = taxToDateExcludingPeriod,
+                n = period,
+                pn = grossForPeriod,
+                Pn1 = grossToDateExcludingPeriod,
+                Pn = grossForPeriod + grossToDateExcludingPeriod,
+                a1 = GetPayAdjustment(taxCode, periods),
+                // Constants
+                M = 50
+            };
+
+            CalculationContainer.na1 = CalculationContainer.a1 * CalculationContainer.n;
+            CalculationContainer.Un = CalculationContainer.Pn - CalculationContainer.na1;
+            CalculationContainer.Tn = TaxMath.Truncate(CalculationContainer.Un, 0);
+        }
+
+        protected override PayeCalculationContainer CreateDefaultContainer()
+        {
+            return new PayeCalculationContainer();
+        }
+
+        protected override PayeInternalBracket[] GetBracketsForPeriod(int year, int period, int periods)
+        {
+            Tuple<int, int, int> brKey;
+            if (BracketCache.ContainsKey(brKey = new Tuple<int, int, int>(year, period, periods)))
+                return BracketCache[brKey];
+
+            var taxYearBrackets = TaxYearSpecificProvider.GetTaxBrackets();
+            var periodBrackets = new List<PayeInternalBracket>();
+
+            decimal lastC = 0, lastK = 0;
+            foreach(var taxYearBracket in taxYearBrackets)
+            {
+                var periodBracket = new PayeInternalBracket();
+                periodBracket.R = taxYearBracket.Multiplier;
+                periodBracket.B = taxYearBracket.To - taxYearBracket.From;
+
+                periodBracket.C = periodBracket.B + lastC;
+                lastC = periodBracket.C;
+
+                periodBracket.c = TaxMath.Factor(periodBracket.C, period, periods);
+                periodBracket.c = TaxMath.Truncate(periodBracket.c, 4);
+                periodBracket.v = Math.Ceiling(periodBracket.c);
+
+                periodBracket.K = lastK + TaxMath.Multiply(periodBracket.B, periodBracket.R, TaxMath.MultiplicationAccuracy.High);
+                lastK = periodBracket.K;
+
+                periodBracket.k = TaxMath.Factor(periodBracket.K, period, periods);
+                periodBracket.k = TaxMath.Truncate(periodBracket.k, 4);
+
+                periodBrackets.Add(periodBracket);
+            }
+
+            BracketCache[brKey] = periodBrackets.ToArray();
+            return periodBrackets.ToArray();
+        }
+
+        protected override decimal GetPayAdjustment(TaxCode taxCode, PayPeriods periods/*, int period*/)
+        {
+            if (taxCode.IsNoAdjustmentCode || !taxCode.TaxCodeNumber.HasValue || taxCode.TaxCodeNumber.Value == 0)
+                return 0;
+
+            var codeNumber = taxCode.TaxCodeNumber.Value;
+            var remainder = ((codeNumber - 1m) % 500) + 1m;
+            var quotient = Math.Floor(codeNumber - remainder) / 500m;
+
+            var payPeriodForQuotient = (periods == PayPeriods.Monthly ? PayPeriods.Monthly : PayPeriods.Weekly);
+            var quotientMult = TaxMath.UpRound(500 * (10 / (decimal)payPeriodForQuotient), 2);
+            remainder = ((remainder * 10) + 9) / (int)payPeriodForQuotient;
+            remainder = Math.Ceiling(remainder * 100) / 100;
+            remainder *= Math.Round((decimal)payPeriodForQuotient / (decimal)periods);
+            quotient = quotient * quotientMult;
+
+            var adjustment = (quotient + remainder);// * period;
+
+            if (taxCode.IsPrefixCode)
+                adjustment *= -1;
+
+            return adjustment;
         }
     }
 }

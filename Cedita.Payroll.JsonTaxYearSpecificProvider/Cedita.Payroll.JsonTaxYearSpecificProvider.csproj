@@ -21,7 +21,9 @@
     <None Remove="PayrollConfig.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PayrollConfig.json" />
+    <Content Include="PayrollConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />

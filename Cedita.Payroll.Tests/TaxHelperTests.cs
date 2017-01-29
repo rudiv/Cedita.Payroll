@@ -79,5 +79,19 @@ namespace Cedita.Payroll.Tests
             Assert.AreEqual(236514.47m, TaxMath.HmrcRound(236514.46984m));
             Assert.AreEqual(784.47m, TaxMath.HmrcRound(784.4687m));
         }
+
+        [TestCategory("Helpers"), TestMethod]
+        public void UpRoundingTest()
+        {
+            Assert.AreEqual(1m, TaxMath.UpRound(0.99999m, 2));
+            Assert.AreEqual(1.96m, TaxMath.UpRound(1.956m, 2));
+            Assert.AreEqual(2.96m, TaxMath.UpRound(2.9555555m, 2));
+            Assert.AreEqual(2.48m, TaxMath.UpRound(2.4719m, 2));
+            Assert.AreEqual(978.55m, TaxMath.UpRound(978.54823m, 2));
+            Assert.AreEqual(8956.55m, TaxMath.UpRound(8956.54168m, 2));
+            Assert.AreEqual(654.17m, TaxMath.UpRound(654.168749m, 2));
+            Assert.AreEqual(236514.47m, TaxMath.UpRound(236514.46984m, 2));
+            Assert.AreEqual(784.47m, TaxMath.UpRound(784.4687m, 2));
+        }
     }
 }

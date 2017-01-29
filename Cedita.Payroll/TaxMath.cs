@@ -54,6 +54,13 @@ namespace Cedita.Payroll
             return value;
         }
 
+        public static decimal UpRound(decimal value, int places = 2)
+        {
+            value = Truncate(value, places);
+            value += (1m / (decimal)Math.Pow(10, places));
+            return value;
+        }
+
         public static decimal HmrcRound(decimal value, int places = 2)
         {
             value = Truncate(value, places + 1);

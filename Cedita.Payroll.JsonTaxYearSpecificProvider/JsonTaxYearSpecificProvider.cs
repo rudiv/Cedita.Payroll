@@ -63,6 +63,13 @@ namespace Cedita.Payroll
             return CurrentTaxYear.FixedCodes.SingleOrDefault(m => m.Code == taxCode);
         }
 
+        public bool IsFixedCode(string taxCode)
+        {
+            EnsureTaxYearSet();
+
+            return CurrentTaxYear.FixedCodes.Any(m => m.Code == taxCode);
+        }
+
         public T GetSpecificValue<T>(TaxYearSpecificValues specificValueType)
         {
             EnsureTaxYearSet();
@@ -131,6 +138,5 @@ namespace Cedita.Payroll
 
             return CurrentTaxYear.Brackets;
         }
-
     }
 }
