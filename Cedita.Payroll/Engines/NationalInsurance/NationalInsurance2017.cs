@@ -34,15 +34,15 @@ namespace Cedita.Payroll.Engines.NationalInsurance
             var niCalc = new NationalInsuranceCalculation
             {
                 EarningsUptoIncludingLEL = SubtractRound(gross, periodLEL, 0),
-                EarningsAboveLELUptoIncludingPTST = SubtractRound(gross, periodPT, periodLEL),
-                EarningsAbovePTSTUptoIncludingUEL = SubtractRound(gross, periodUEL, periodPT),
+                EarningsAboveLELUptoIncludingPT = SubtractRound(gross, periodPT, periodLEL),
+                EarningsAboveSTUptoIncludingUEL = SubtractRound(gross, periodUEL, periodPT),
                 EarningsAboveUEL = SubtractRound(gross, gross, periodUEL)
             };
 
-            niCalc.EmployeeNiGross += TaxMath.HmrcRound(niCalc.EarningsAbovePTSTUptoIncludingUEL * (niRates.EeC / 100));
+            niCalc.EmployeeNiGross += TaxMath.HmrcRound(niCalc.EarningsAboveSTUptoIncludingUEL * (niRates.EeC / 100));
             niCalc.EmployeeNiGross += TaxMath.HmrcRound(niCalc.EarningsAboveUEL * (niRates.EeD / 100));
 
-            niCalc.EmployerNiGross += TaxMath.HmrcRound(niCalc.EarningsAbovePTSTUptoIncludingUEL * (niRates.ErC / 100));
+            niCalc.EmployerNiGross += TaxMath.HmrcRound(niCalc.EarningsAboveSTUptoIncludingUEL * (niRates.ErC / 100));
             niCalc.EmployerNiGross += TaxMath.HmrcRound(niCalc.EarningsAboveUEL * (niRates.ErD / 100));
 
             return niCalc;

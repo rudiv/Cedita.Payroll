@@ -12,7 +12,7 @@ namespace Cedita.Payroll.Tests
     {
         protected Dictionary<int, INiCalculationEngine> CalcEngines = new Dictionary<int, INiCalculationEngine>();
 
-        protected decimal LegacyShim(decimal gross, char niCode, PayPeriods periods, int year)
+        protected decimal TestShim(decimal gross, char niCode, PayPeriods periods, int year)
         {
             if (!CalcEngines.ContainsKey(year))
             {

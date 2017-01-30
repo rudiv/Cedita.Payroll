@@ -6,8 +6,9 @@ namespace Cedita.Payroll.Engines.NationalInsurance
     public class NationalInsuranceCalculation
     {
         public decimal EarningsUptoIncludingLEL { get; set; }
-        public decimal EarningsAboveLELUptoIncludingPTST { get; set; }
-        public decimal EarningsAbovePTSTUptoIncludingUEL { get; set; }
+        public decimal EarningsAboveLELUptoIncludingPT { get; set; }
+        public decimal EarningsAbovePTUptoIncludingST { get; set; }
+        public decimal EarningsAboveSTUptoIncludingUEL { get; set; }
         public decimal EarningsAboveUEL { get; set; }
 
         /// <summary>
