@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="PayrollConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="2.16.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Cedita.Payroll.JsonTaxYearSpecificProvider\Cedita.Payroll.JsonTaxYearSpecificProvider.csproj" />
+    <ProjectReference Include="..\Cedita.Payroll\Cedita.Payroll.csproj" />
+  </ItemGroup>
+</Project>
